@@ -1,0 +1,98 @@
+<aiml version="2.0">
+<!--  Menu inicial  -->
+<category>
+<pattern>HOLA</pattern>
+<template> Buenas, ¿qué quieres hacer? Escribe "Agregar empleado" para añadir un nuevo empleado o "Consultar empleado" para consultar la información de algún empleado registrado. </template>
+</category>
+<!--  Menú para registrar empleado  -->
+<category>
+<pattern>AGREGAR EMPLEADO</pattern>
+<template>
+¿Cuál es el nombre y apellidos del empleado?
+<think>
+<set name="registro">1</set>
+</think>
+</template>
+</category>
+<!--  Registrar nombre y apellidos  -->
+<category>
+<pattern>*</pattern>
+<condition name="registro" value="1">
+<template>
+<think>
+<set name="nombre_apellidos">
+<star/>
+</set>
+<set name="registro">2</set>
+</think>
+¿Qué edad tiene el empleado?
+</template>
+</condition>
+</category>
+<!--  Registrar edad  -->
+<category>
+<pattern>*</pattern>
+<condition name="registro" value="2">
+<template>
+<think>
+<set name="edad">
+<star/>
+</set>
+<set name="registro">3</set>
+</think>
+¿Qué tecnologías ha utilizado recientemente?
+</template>
+</condition>
+</category>
+<!--  Registrar tecnologías  -->
+<category>
+<pattern>*</pattern>
+<condition name="registro" value="3">
+<template>
+<think>
+<set name="tecnologias">
+<star/>
+</set>
+<set name="registro">0</set>
+</think>
+<learn>
+empleados/
+<get name="nombre_apellidos"/>
+.aiml
+</learn>
+El empleado
+<get name="nombre_apellidos"/>
+ha sido registrado correctamente.
+</template>
+</condition>
+</category>
+<!--  Consulta de empleado  -->
+<category>
+<pattern>CONSULTAR EMPLEADO *</pattern>
+<template>
+<think>
+<set name="empleado_nombre">
+<star/>
+</set>
+</think>
+<learn>
+empleados/
+<get name="empleado_nombre"/>
+.aiml
+</learn>
+<srai>
+DATOS
+<get name="empleado_nombre"/>
+</srai>
+</template>
+</category>
+<!--  Mensaje si el empleado no está registrado  -->
+<category>
+<pattern>DATOS *</pattern>
+<template>
+Lo siento, el empleado
+<star/>
+no está registrado en el sistema.
+</template>
+</category>
+</aiml>
